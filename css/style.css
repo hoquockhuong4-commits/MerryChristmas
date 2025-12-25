@@ -38,20 +38,44 @@ body {
   top: 0;
   left: 0;
   z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 #loading .spinner {
   position: relative;
   width: 94px;
   height: 112px;
-  top: 50%;
-  margin: -56px auto;
   background: url("../imgs/loading.png") no-repeat center;
   -webkit-animation: mask 1s infinite alternate;
   -moz-animation: mask 1s infinite alternate;
   -ms-animation: mask 1s infinite alternate;
   -o-animation: mask 1s infinite alternate;
   animation: mask 1s infinite alternate;
+}
+
+#start-btn {
+  display: none; /* Sẽ hiện lên bằng JS */
+  cursor: pointer;
+  color: white;
+  border: 2px solid white;
+  padding: 12px 30px;
+  margin-top: 30px; /* Khoảng cách với cái spinner ở trên */
+  font-weight: bold;
+  border-radius: 30px;
+  background: rgba(196, 30, 58, 0.2); /* Nền đỏ nhạt trong suốt */
+  transition: all 0.3s ease;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#start-btn:hover {
+  background: rgba(196, 30, 58, 0.8);
+  transform: scale(1.1);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
 }
 
 @-webkit-keyframes mask {
@@ -109,6 +133,7 @@ body {
   top: 0;
   left: 0;
   z-index: 9000;
+  pointer-events: none;
 }
 /* Ice End */
 
@@ -120,6 +145,7 @@ body {
   top: 0;
   left: 0;
   z-index: 800;
+  pointer-events: none;
 }
 /* Snow End */
 
@@ -173,7 +199,7 @@ body {
   right: 100px;
   width: 250px;
   height: 400px;
-  z-index: 500;
+  z-index: 1000;
 }
 
 .tree-image {
@@ -187,42 +213,27 @@ body {
 }
 .gift-box {
   position: absolute;
-  width: 50px;
-  height: 50px;
-  background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
-  border: 3px solid #ffff00;
-  border-radius: 8px;
+  width: 60px; /* Bạn có thể chỉnh to nhỏ tùy ý */
+  height: auto;
   cursor: pointer;
-  transition: all 0.3s ease;
-  transform: scale(1) rotate(0deg);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 10;
-  font-size: 28px;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.gift-box img {
+  width: 100%;
+  height: auto;
+  /* Đổ bóng cho ảnh để trông thật hơn */
+  filter: drop-shadow(2px 5px 8px rgba(0, 0, 0, 0.4));
 }
 
 .gift-box:hover {
-  transform: scale(1.15) rotate(-5deg);
-  box-shadow: 0 8px 16px rgba(255, 215, 0, 0.6),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: scale(1.2) rotate(10deg); /* Phóng to và xoay nhẹ */
   filter: brightness(1.1);
 }
 
 .gift-box:active {
-  transform: scale(0.95) rotate(0deg);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
-}
-
-.gift-inner {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: bold;
+  transform: scale(0.9);
 }
 
 /* Modal Begin */
@@ -267,22 +278,36 @@ body {
 
 #modalBody {
   font-family: "UVNGiayTrang", sans-serif;
-  color: #333;
+  color: #ff69b4;
   line-height: 1.6;
 }
 
 #modalBody img {
-  max-width: 100%;
+  max-width: 50%;
   height: auto;
   margin: 15px 0;
   border-radius: 8px;
 }
 
-#modalBody video {
-  max-width: 100%;
-  height: auto;
-  margin: 15px 0;
+#modalBody img {
+  max-width: 80%;
+  max-height: 450px; /* Giới hạn chiều cao để ảnh dọc không bị quá dài */
+  display: block; /* Đưa về dạng block để dùng margin auto */
+  margin: 15px auto; /* Căn giữa ảnh trong modal */
   border-radius: 8px;
+  object-fit: contain; /* Đảm bảo ảnh không bị méo */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+#modalBody video {
+  max-width: 90%;
+  max-height: 70vh; /* QUAN TRỌNG: Không cao quá 70% chiều cao màn hình */
+  display: block;
+  margin: 15px auto; /* Căn giữa video */
+  border-radius: 10px;
+  object-fit: contain; /* Giữ nguyên tỷ lệ video, không bị bóp méo */
+  background: #000; /* Thêm nền đen nếu video dọc không lấp đầy chiều ngang */
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes fadeIn {
@@ -304,6 +329,141 @@ body {
     opacity: 1;
   }
 }
+/* Thanh nhiệm vụ chính */
+#mission-bar {
+  position: fixed;
+  top: 20px; /* Nằm dưới lớp băng (71px) một chút */
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(196, 30, 58, 0.85); /* Màu đỏ đô trong suốt */
+  color: #fff;
+  padding: 12px 30px;
+  border-radius: 50px;
+  border: 2px solid #ffd700; /* Viền vàng gold */
+  font-size: 18px;
+  font-weight: bold;
+  z-index: 9500; /* Nằm trên cây thông và tuyết */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  white-space: nowrap;
+  animation: bounceIn 1s ease, glow 2s infinite alternate;
+}
+
+.mission-icon {
+  margin: 0 10px;
+  font-size: 22px;
+}
+
+/* Hiệu ứng hiện ra mượt mà */
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  60% {
+    transform: translate(-50%, 5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Hiệu ứng phát sáng nhẹ */
+@keyframes glow {
+  from {
+    box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
+  }
+  to {
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.6);
+  }
+}
+
 /* Modal End */
 
 /* Christmas Tree End */
+/* --- RESPONSIVE CHO IPHONE 13 & MOBILE --- */
+@media only screen and (max-width: 480px) {
+  /* 1. Điều chỉnh nền */
+  #wrap {
+    background-attachment: scroll; /* Giúp mobile chạy mượt hơn */
+  }
+
+  /* 2. Thu nhỏ cây thông Noel */
+  #christmasTree {
+    top: 120px !important; /* Đưa cây lên cao một chút */
+    right: 10px !important; /* Đẩy sát lề phải */
+    width: 160px !important; /* Thu nhỏ chiều rộng */
+    height: auto !important;
+  }
+
+  /* 3. Chỉnh lại các hộp quà cho dễ bấm trên cảm ứng */
+  .gift-box {
+    width: 40px !important;
+    height: auto !important;
+  }
+
+  /* 4. Thu nhỏ lá thư (Rất quan trọng vì iPhone 13 chỉ rộng 390px) */
+  #letter {
+    width: 320px !important; /* Nhỏ hơn chiều rộng màn hình 390px */
+    height: 250px !important;
+    background-size: 100% 100% !important;
+  }
+
+  .message {
+    font-size: 15px !important; /* Chữ nhỏ lại để không bị tràn */
+    top: 35px !important;
+    left: 30px !important;
+    max-width: 250px !important;
+    line-height: 1.2em !important;
+  }
+
+  /* 5. Thu nhỏ ông già Noel khi bay qua màn hình */
+  #santaClaus {
+    max-width: 150px !important; /* Không cho ông già Noel chiếm hết màn hình */
+  }
+
+  /* 6. Chỉnh lại Modal hiển thị ảnh/video */
+  .modal-content {
+    width: 90% !important;
+    margin: 20% auto !important;
+    padding: 15px !important;
+  }
+
+  #modalBody img {
+    max-height: 300px !important; /* Ảnh dọc không quá dài trên mobile */
+  }
+
+  /* 7. Thu nhỏ con tuần lộc */
+  #reindeer {
+    width: 80px !important;
+    bottom: 10px !important;
+  }
+
+  /* 8. Nút bắt đầu (Loading) */
+  #start-btn {
+    font-size: 14px !important;
+    padding: 8px 15px !important;
+  }
+}
+@keyframes shake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(5deg);
+  }
+  50% {
+    transform: rotate(0eg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.gift-box {
+  animation: shake 2s infinite ease-in-out;
+}

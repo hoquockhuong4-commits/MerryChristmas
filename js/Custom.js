@@ -39,6 +39,15 @@ function startExperience() {
     overflow: "visible",
     height: "100%",
   });
+  // 3. THÊM DÒNG NÀY: Hiện thanh nhiệm vụ sau khi vào màn hình chính
+  setTimeout(function () {
+    $("#mission-bar").fadeIn(800, function () {
+      // Sau khi hiện xong (callback), đợi tiếp 15 giây (15000ms) rồi ẩn đi
+      setTimeout(function () {
+        $("#mission-bar").fadeOut(1000); // Ẩn đi trong vòng 1 giây cho mượt
+      }, 15000);
+    });
+  }, 1000); // Hiện ra sau khi vào màn hình chính 1 giây
 }
 
 /* Scroll Title Begin */
@@ -194,10 +203,10 @@ function loop() {
 
 var bShowLetter = false;
 $(document).ready(function () {
-  $("#start-btn").click(function() {
+  $("#start-btn").click(function () {
     startExperience();
   });
-  
+
   scrlsts();
   snowEffectBind();
   showSantaClaus();
@@ -225,12 +234,12 @@ $(document).ready(function () {
               $(".message").typed({
                 strings: [
                   "<<< Merry Christmas >>>",
-                  "Chúc em bé Tiên của anh có một mùa giáng sinh an lành và ấm áp bên người thân và bạn bè :) Nghe nhạc zui zẻ nha!!!",
+                  "Mong món quà nhỏ này của anh sẽ giúp bé Tiên có một cuối ngày giáng sinh dui dẻ nha =)) Nhìn thử cây thông có gì nha (từ trên xuống dưới). Nhấn Đọc xong để tắt cái này đi ~/'-'/~",
                 ],
-                typeSpeed: 50,
+                typeSpeed: 25,
                 startDelay: 500,
-                backSpeed: 50,
-                backDelay: 500,
+                backSpeed: 20,
+                backDelay: 4000,
                 loop: true,
                 contentType: "html",
                 showCursor: false,
@@ -264,22 +273,73 @@ $(document).ready(function () {
       bShowLetter = false;
     }
   });
+  // 1. Cấu hình nội dung cho từng hộp quà
   const giftContents = {
-    1: '<h3>Món quà số 1</h3><img src="imgs/anh1.jpg">',
-    2: '<h3>Video Quà</h3><video controls autoplay><source src="video/vd1.mp4"></video>',
-    // ... thêm các hộp khác
+    1: {
+      type: "video",
+      title: "Tiên nữ giáng trần 💖💖💖💖",
+      src: "imgs/betien.mp4", // Đường dẫn ảnh của bạn
+    },
+    2: {
+      type: "video",
+      title:
+        "Kỷ niệm của chúng mình 🎥 (yêu cầu bữa sau quay video đàng hoàng cho tui nghe chưa ông)",
+      src: "imgs/vid.mp4", // Đường dẫn video của bạn
+    },
+    3: {
+      type: "image",
+      title: "Chu Vận nè🎉",
+      src: "imgs/chuvan.png",
+    },
+    4: {
+      type: "image",
+      title: "Hết rầu á ngắm anh đi cho đỡ nhớ =)) Ngủ ngon nha 😘",
+      src: "imgs/me.jpg",
+    },
+    5: {
+      type: "video",
+      title: "Coi như mình đi noel sớm đi 🎄 =))",
+      src: "imgs/firstdate.mp4",
+    },
+    6: {
+      type: "video",
+      title: "Hihi, anh hớt tay trên lấy video của e luôn kk 🎅",
+      src: "imgs/noel.mp4",
+    },
   };
 
+  // 2. Xử lý khi click vào hộp quà
   $(".gift-box").on("click", function () {
     const giftId = $(this).data("gift");
-    const content = giftContents[giftId] || "<p>Quà đang chờ bạn!</p>";
-    $("#modalBody").html(content);
+    const gift = giftContents[giftId];
+    let htmlContent = "";
+
+    if (gift) {
+      if (gift.type === "image") {
+        htmlContent = `<h3>${gift.title}</h3><img src="${gift.src}">`;
+      } else if (gift.type === "video") {
+        htmlContent = `<h3>${gift.title}</h3>
+                       <video controls autoplay loop>
+                         <source src="${gift.src}" type="video/mp4">
+                         Trình duyệt của bạn không hỗ trợ video.
+                       </video>`;
+      }
+    } else {
+      htmlContent =
+        "<h3>Hộp quà bí ẩn</h3><p>Quà đang được chuẩn bị, quay lại sau nhé!</p>";
+    }
+
+    $("#modalBody").html(htmlContent);
     $("#giftModal").fadeIn(300);
   });
 
+  // 3. Đóng Modal
   $(".close, #giftModal").click(function (e) {
-    if (e.target !== this && !$(this).hasClass("close")) return;
-    $("#giftModal").fadeOut(300);
-    $("#modalBody").html(""); // Tắt video khi đóng
+    // Nếu click vào dấu X hoặc click ra ngoài vùng trắng (vùng tối)
+    if (e.target === this || $(e.target).hasClass("close")) {
+      $("#giftModal").fadeOut(300, function () {
+        $("#modalBody").html(""); // QUAN TRỌNG: Xóa nội dung để dừng video ngay lập tức
+      });
+    }
   });
 });
