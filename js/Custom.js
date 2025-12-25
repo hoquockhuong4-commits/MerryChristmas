@@ -234,7 +234,7 @@ $(document).ready(function () {
               $(".message").typed({
                 strings: [
                   "<<< Merry Christmas >>>",
-                  "Mong món quà nhỏ này của anh sẽ giúp bé Tiên có một cuối ngày giáng sinh dui dẻ nha =)) Nhìn thử cây thông có gì nha (từ trên xuống dưới). Nhấn Đọc xong để tắt cái này đi ~/'-'/~",
+                  "Mong món quà nhỏ này sẽ giúp bé Tiên của anh có một cuối ngày giáng sinh dui dẻ nha =)) Nhìn thử cây thông có gì nha (từ trên xuống dưới). Nhấn lại con tuần lộc để tắt cái này đi ~/'-'/~",
                 ],
                 typeSpeed: 25,
                 startDelay: 500,
