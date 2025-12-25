@@ -319,7 +319,7 @@ $(document).ready(function () {
         htmlContent = `<h3>${gift.title}</h3><img src="${gift.src}">`;
       } else if (gift.type === "video") {
         htmlContent = `<h3>${gift.title}</h3>
-                       <video controls autoplay loop>
+                       <video controls autoplay loop muted>
                          <source src="${gift.src}" type="video/mp4">
                          Trình duyệt của bạn không hỗ trợ video.
                        </video>`;
