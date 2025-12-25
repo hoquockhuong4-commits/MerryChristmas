@@ -42,10 +42,10 @@ function startExperience() {
   // 3. THÊM DÒNG NÀY: Hiện thanh nhiệm vụ sau khi vào màn hình chính
   setTimeout(function () {
     $("#mission-bar").fadeIn(800, function () {
-      // Sau khi hiện xong (callback), đợi tiếp 15 giây (15000ms) rồi ẩn đi
+      // Sau khi hiện xong (callback), đợi tiếp 20 giây (20000ms) rồi ẩn đi
       setTimeout(function () {
         $("#mission-bar").fadeOut(1000); // Ẩn đi trong vòng 1 giây cho mượt
-      }, 15000);
+      }, 20000);
     });
   }, 1000); // Hiện ra sau khi vào màn hình chính 1 giây
 }
@@ -239,7 +239,7 @@ $(document).ready(function () {
                 typeSpeed: 25,
                 startDelay: 500,
                 backSpeed: 20,
-                backDelay: 4000,
+                backDelay: 1000,
                 loop: true,
                 contentType: "html",
                 showCursor: false,
